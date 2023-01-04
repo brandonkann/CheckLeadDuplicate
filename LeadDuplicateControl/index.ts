@@ -7,6 +7,16 @@ export class LeadDuplicateControl implements ComponentFramework.StandardControl<
     private customInput : HTMLInputElement;
     private emailAddress : string;
 
+    // Fields to autofill from lead:
+    private _first_name: string;
+    private _last_name: string;
+    private _address_line_1: string;
+    private _address_line_2: string;
+    private _provincestate: string; 
+    private _city: string; 
+    private _postcode: string;
+    private _country: string;
+
      // The callback function to call whenever your code has made a change to a bound or output property\
      private notifyOutputChanged: () => void;
     constructor()
@@ -35,6 +45,7 @@ export class LeadDuplicateControl implements ComponentFramework.StandardControl<
         this.customInput = document.createElement("input");
         this.customInput.id = "email_address";
         this.customInput.type = "text";
+        this.customInput.value = this.emailAddress;
 
         let timeout : any = null;
 
@@ -68,11 +79,11 @@ export class LeadDuplicateControl implements ComponentFramework.StandardControl<
 
             this.context.webAPI.retrieveMultipleRecords("lead","?fetchXml=" +query).then(
                 (response: ComponentFramework.WebApi.RetrieveMultipleResponse) => {
-                    if (response.entities[0]) {
-                        this.showModal();
+                    if (response.entities.length >= 1) {
+                        this.showModal(response.entities[0]);
                     }
                     else {
-                        alert("Unable to locate Lead, please proceed with creation")
+                        alert("Unable to Locate Lead, please proceed with Contact creation")
                     }
                 
                 },
@@ -86,24 +97,21 @@ export class LeadDuplicateControl implements ComponentFramework.StandardControl<
         
     }
 
-    private showModal() : void {
-        var confirmStrings = {
+    private showModal(leadObj : any) : void {
+        const response = confirm("A lead has been found with the same Email Address. Do you want to populate contact with lead data")
+        
+        if (response) {
+            console.log("Transferring data")
+            console.log(leadObj)
+            this._first_name = leadObj.firstname;
+            this._last_name = leadObj.lastname;
+            this._address_line_1 = leadObj.address1_line1
+            this.notifyOutputChanged();
+        }
+        else {
+            console.log("Manually enter data")
+        }
 
-            text: "Do you want to clone this Quote and Proposed Vessels.", title: "Please Confirmation",
-         
-            subtitle: "", "cancelButtonLabel": "Cancel", confirmButtonLabel: "Confirm"
-         
-         };
-         
-        //  var confirmOptions = { height: 200, width: 500 };
-         
-        //  Xrm.Navigation.openConfirmDialog(confirmStrings, confirmOptions).then(
-         
-        //     function (success) {
-         
-         //add your logic
-         
-            // });
     }
 
 
@@ -122,7 +130,14 @@ export class LeadDuplicateControl implements ComponentFramework.StandardControl<
      */
     public getOutputs(): IOutputs
     {
-        return {};
+        var output: { [k: string]: any } = {};
+
+        output.firstname = this._first_name;
+        output.lastname = this._last_name;
+        output.address1_line1 = this._address_line_1
+
+        return output;   
+    
     }
 
     /**

@@ -18,7 +18,16 @@
       -->
     </external-service-usage>
     <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
-    <property name="email_address" display-name-key="Email_Address" description-key="Email Address of Contact" of-type="SingleLine.Text" usage="bound" required="true" />
+    <property name="email_address" display-name-key="Email_Address" description-key="Email Address of Contact" of-type="SingleLine.Email" usage="bound" required="true" />
+     <!-- Fields to Auto Populate -->
+    <property name="firstname" display-name-key="First Name" description-key="The First Name" of-type="SingleLine.Text" usage="bound" required="false" /> 
+    <property name="lastname" display-name-key="Last Name" description-key="The Last Name" of-type="SingleLine.Text" usage="bound" required="false" /> 
+    <property name="address1_line1" display-name-key="Line 1" description-key="The address line 1." of-type="SingleLine.Text" usage="bound" required="false" />
+    <property name="address_line_2" display-name-key="Line 2" description-key="The address line 2." of-type="SingleLine.Text" usage="bound" required="false" />
+    <property name="province_or_state" display-name-key="Province or State" description-key="The address province or state" of-type="SingleLine.Text" usage="bound" required="false" />
+    <property name="city" display-name-key="City" description-key="The address city." of-type="SingleLine.Text" usage="bound" required="false" />
+    <property name="postcode" display-name-key="Post Code" description-key="The address post code." of-type="SingleLine.Text" usage="bound" required="false" />
+    <property name="country" display-name-key="Country" description-key="The address country." of-type="SingleLine.Text" usage="bound" required="false" />
     
     <!--
       Property node's of-type attribute can be of-type-group attribute.
